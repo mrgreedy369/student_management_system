@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Management System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="update.css" />
+  </head>
+  <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+
+    <div id="register-page" style="display: none; 
+    background: linear-gradient(135deg, #244582, #2c549a);">
+      <div class="login-container">
+        <h2>Register</h2>
+        <form id="register-form" onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label for="reg-role">Role:</label>
+            <select id="reg-role" required>
+              <option value="" disabled selected>Select Role</option>
+              <option value="student">Student</option>
+              <option value="faculty">Faculty</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="reg-username">Username:</label>
+            <input type="text" id="reg-username" required />
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Password:</label>
+            <input type="password" id="reg-password" required />
+          </div>
+          <div class="form-group">
+            <label for="reg-name">Full Name:</label>
+            <input type="text" id="reg-name" required />
+          </div>
+          <div class="form-group">
+            <label for="reg-email">Email:</label>
+            <input type="email" id="reg-email" required />
+          </div>
+          <div class="form-group">
+            <label for="reg-phone">Phone:</label>
+            <input type="text" id="reg-phone" />
+          </div>
+          <div class="form-group">
+            <label for="reg-address">Address:</label>
+            <input type="text" id="reg-address" />
+          </div>
+          <button type="submit">Register</button>
+        </form>
+        <p id="register-error"></p>
+        <p>Already have an account? <a href="#" onclick="showLogin()">Login here</a></p>
+      </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page">
+      <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="role">Role:</label>
+            <select id="role" required>
+              <option value="" disabled selected>Select Role</option>
+              <option value="student">Student</option>
+              <option value="faculty">Faculty</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" required />
+          </div>
+          <div class="form-group" id="otp-group" style="display: none">
+            <label for="otp">Enter OTP:</label>
+            <input type="text" id="otp" maxlength="6" />
+          </div>
+          <button type="submit" id="login-btn">Login</button>
+          <button
+            type="button"
+            id="verify-otp-btn"
+            style="display: none"
+            onclick="verifyOTP()"
+          >
+            Verify OTP
+          </button>
+        </form>
+        
+        <p id="login-error"></p>
+        <p>New user? <a href="#" onclick="showRegister()">Register here</a></p>
+      
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard">
+      <header>
+        
+  <img src="logo.png" alt="logo" class="remove-bg" width="80px" height="80px" style="  border-radius: 55%;
+    object-fit: cover;" ></img>
+    <h4 style="color: rgba(194, 194, 194, 0.916);">(Shobhit University Gangoh)</h4>
+ 
+        <div class="header-content">
+         
+          <h1>Student Management System</h1>
+
+         
+          <nav>
+            <ul>
+              <li>
+                <a
+                  href="#home"
+                  class="nav-link active"
+                  onclick="showSection('home')"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#profile"
+                  class="nav-link"
+                  onclick="showSection('profile')"
+                  >Profile</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#attendance"
+                  class="nav-link"
+                  onclick="showSection('attendance')"
+                  >Attendance</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#assignments"
+                  class="nav-link"
+                  onclick="showSection('assignments')"
+                  >Assignments</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#grades"
+                  class="nav-link"
+                  onclick="showSection('grades')"
+                  >Grades</a
+                >
+              </li>
+              <li>
+                <a href="#fees" class="nav-link" onclick="showSection('fees')"
+                  >Fees</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#feedback"
+                  class="nav-link"
+                  onclick="showSection('feedback')"
+                  >Feedback</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#events"
+                  class="nav-link"
+                  onclick="showSection('events')"
+                  >Events</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#queries"
+                  class="nav-link"
+                  onclick="showSection('queries')"
+                  >Queries</a
+                >
+              </li>
+              <li><a href="#documents" class="nav-link" onclick="showSection('documents')">DOCs</a></li>
+
+              <li>
+                <a
+                  href="#notifications"
+                  class="nav-link"
+                  onclick="showSection('notifications')"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"
+                    ></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+            <div class="menu-bar">
+              <button class="menu-btn">☰</button>
+              <div class="menu-dropdown">
+                <a href="#profile" onclick="showSection('profile')">Profile</a>
+                <a href="#settings" onclick="showSection('settings')"
+                  >Settings</a
+                >
+                <a href="#links" onclick="showSection('links')">Links</a>
+                <a href="#" onclick="logout()">Logout</a>
+              </div>
+            </div>
+            
+        
+
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <!-- Home Section (Dashboard) -->
+        <section id="home" class="section active">
+          <h2>Dashboard</h2>
+          <!-- Student Dashboard -->
+          <div id="student-dashboard" style="display: none">
+            <h3>Academic Progress Tracker</h3>
+            <div class="progress-bar">
+              <div id="academic-progress" class="progress" style="width: 0%">
+                0%
+              </div>
+            </div>
+            <h3>Attendance History</h3>
+            <div class="summary-box">
+              <p id="student-attendance-summary"></p>
+            </div>
+            <h3>Fee Payment Status</h3>
+            <div class="summary-box">
+              <p id="fee-payment-status"></p>
+            </div>
+            <h3>Assignment Deadlines</h3>
+            <ul id="assignment-deadlines"></ul>
+            <h3>Exam Schedule</h3>
+            <table id="exam-schedule-table">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody id="exam-schedule-body"></tbody>
+            </table>
+          </div>
+          <!-- Faculty Dashboard -->
+          <div id="faculty-dashboard" style="display: none">
+            <h3>Student Performance Analytics</h3>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <h4>Average Grade</h4>
+                <p id="average-grade">0</p>
+              </div>
+              <div class="stat-card">
+                <h4>Top Performer</h4>
+                <p id="top-performer">-</p>
+              </div>
+              <div class="stat-card">
+                <h4>Attendance Rate</h4>
+                <p id="faculty-attendance-rate">0%</p>
+              </div>
+            </div>
+            <h3>Attendance Management</h3>
+            <div class="summary-box">
+              <div id="faculty-attendance-summary"></div>
+            </div>
+            <h3>Grade Submission & Update</h3>
+            <form id="grade-submission-form" onsubmit="submitGrade(event)">
+              <div class="form-group">
+                <label for="grade-student">Student:</label>
+                <select id="grade-student" required>
+                  <option value="" disabled selected>Select Student</option>
+                  <option value="Shivam Sahaghal">Shivam Sahaghal</option>
+                  <option value="Vipul Sharma">Vipul Sharma</option>
+                  <option value="Anshul Kapil">Anshul Kapil</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="grade-subject">Subject:</label>
+                <select id="grade-subject" required>
+                  <option value="" disabled selected>Select Subject</option>
+                  <option value="Software Engineering">Software Engineering</option>
+                  <option value="C++ Programming">C++ Programming</option>
+                  <option value="DSA">DSA</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="grade-marks">Marks:</label>
+                <input
+                  type="number"
+                  id="grade-marks"
+                  min="0"
+                  max="100"
+                  required
+                />
+              </div>
+              <button type="submit">Submit Grade</button>
+            </form>
+            <h3>Assignment Review Panel</h3>
+            <ul id="assignment-review-list"></ul>
+            <h3>Student Data Modification</h3>
+            <form id="student-data-form" onsubmit="modifyStudentData(event)">
+              <div class="form-group">
+                <label for="modify-student">Student:</label>
+                <select id="modify-student" required>
+                  <option value="" disabled selected>Select Student</option>
+                  <option value="John Doe">Mohan</option>
+                  <option value="Jane Smith">jawwad</option>
+                  <option value="Mike Johnson">Vaibhav</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="modify-email">Email:</label>
+                <input type="email" id="modify-email" />
+              </div>
+              <div class="form-group">
+                <label for="modify-bio">Bio:</label>
+                <textarea id="modify-bio" rows="3"></textarea>
+              </div>
+              <button type="submit">Update Student Data</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Attendance Section -->
+        <section id="attendance" class="section">
+          <h2>Attendance</h2>
+          <div id="attendance-student-view" style="display: none">
+            <h3>Your Attendance Summary</h3>
+            <table id="attendance-student-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="attendance-student-body"></tbody>
+            </table>
+            <div class="summary-box">
+              <h3>Summary</h3>
+              <p id="student-attendance-summary"></p>
+            </div>
+          </div>
+          <div id="attendance-faculty-view" style="display: none">
+            <h3>Mark Attendance</h3>
+            <form id="mark-attendance-form" onsubmit="markAttendance(event)">
+              <div class="form-group">
+                <label for="attendance-date">Date:</label>
+                <input type="date" id="attendance-date" required />
+              </div>
+              <div id="student-attendance-list">
+                <div class="form-group">
+                  <label>Anshul Kapil:</label>
+                  <select name="John Doe" required>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Shivam Sahaghal:</label>
+                  <select name="Jane Smith" required>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Mohan Saini:</label>
+                  <select name="Mike Johnson" required>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit">Mark Attendance</button>
+            </form>
+            <h3>View Attendance</h3>
+            <div class="form-group-inline">
+              <div>
+                <label for="filter-date">Filter by Date:</label>
+                <input
+                  type="date"
+                  id="filter-date"
+                  onchange="filterAttendance()"
+                />
+              </div>
+              <div>
+                <label for="filter-student">Filter by Student:</label>
+                <select id="filter-student" onchange="filterAttendance()">
+                  <option value="">All Students</option>
+                  <option value="Anshul Kapil">Anshul Kapil</option>
+                  <option value="Junaid">Junaid</option>
+                  <option value="Koushindra">Koushindra</option>
+                </select>
+              </div>
+              <button onclick="exportAttendance('pdf')">Export to PDF</button>
+              <button onclick="exportAttendance('excel')">
+                Export to Excel
+              </button>
+            </div>
+            <table id="attendance-faculty-table">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="attendance-faculty-body"></tbody>
+            </table>
+            <div class="summary-box">
+              <h3>Attendance Summary</h3>
+              <div id="faculty-attendance-summary"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Grades Section -->
+        <section id="grades" class="section">
+          <h2>Grades</h2>
+          <div class="form-group-inline">
+            <div>
+              <label for="search-grade-student">Search by Student:</label>
+              <input
+                type="text"
+                id="search-grade-student"
+                placeholder="Enter student name"
+                oninput="filterGrades()"
+              />
+            </div>
+            <div>
+              <label for="filter-grade-subject">Filter by Subject:</label>
+              <select id="filter-grade-subject" onchange="filterGrades()">
+                <option value="">All Subjects</option>
+                <option value="Data Stucture">Data Stucture</option>
+                <option value="java Programming">java Programming</option>
+                <option value="Computer Network">Computer Network</option>
+              </select>
+            </div>
+            <button onclick="exportGrades('pdf')">Export to PDF</button>
+            <button onclick="exportGrades('excel')">Export to Excel</button>
+          </div>
+          <table id="grades-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="grades-body"></tbody>
+          </table>
+        </section>
+
+        <!-- Assignments Section -->
+        <section id="assignments" class="section">
+          <h2>Assignments</h2>
+          <div id="assignments-faculty-view" style="display: none">
+            <h3>Upload Assignment</h3>
+            <form
+              id="upload-assignment-form"
+              onsubmit="uploadAssignment(event)"
+            >
+              <div class="form-group">
+                <label for="assignment-title">Title:</label>
+                <input type="text" id="assignment-title" required />
+              </div>
+              <div class="form-group">
+                <label for="assignment-due-date">Due Date:</label>
+                <input type="date" id="assignment-due-date" required />
+              </div>
+              <div class="form-group">
+                <label for="assignment-file">Upload File:</label>
+                <input
+                  type="file"
+                  id="assignment-file"
+                  accept=".pdf,.doc,.docx"
+                  required
+                />
+              </div>
+              <button type="submit">Upload Assignment</button>
+            </form>
+          </div>
+          <div id="assignments-student-view" style="display: none">
+            <h3>Submit Assignment</h3>
+            <form
+              id="submit-assignment-form"
+              onsubmit="submitAssignment(event)"
+            >
+              <div class="form-group">
+                <label for="submit-assignment-title">Select Assignment:</label>
+                <select id="submit-assignment-title" required>
+                  <option value="" disabled selected>Select Assignment</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="submit-assignment-file">Upload PDF:</label>
+                <input
+                  type="file"
+                  id="submit-assignment-file"
+                  accept=".pdf"
+                  required
+                />
+              </div>
+              <button type="submit">Submit Assignment</button>
+            </form>
+          </div>
+          <h3>Assignment List</h3>
+          <ul id="assignments-list"></ul>
+        </section>
+
+        <!-- Fees Section -->
+        <section id="fees" class="section">
+          <h2>Fees</h2>
+          <div id="fees-faculty-view" style="display: none">
+            <h3>Record Payment</h3>
+            <form id="fees-form" onsubmit="handlePayment(event)">
+              <div class="form-group">
+                <label for="student-name">Student Name:</label>
+                <input type="text" id="student-name" required />
+              </div>
+              <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" required />
+              </div>
+              <button type="submit">Record Payment</button>
+            </form>
+          </div>
+          <h3>Payment Summary</h3>
+          <div id="fees-summary">
+            <table id="fees-table">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="fees-body"></tbody>
+            </table>
+            <button onclick="exportFees()">Export to PDF</button>
+          </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+          <h2>Profile</h2>
+          <div class="profile-container">
+            <div class="profile-details">
+              <div class="profile-pic-container">
+                <img
+                  id="profile-pic"
+                  class="profile-pic"
+                  src="https://via.placeholder.com/100"
+                  alt="Profile Picture"
+                />
+                <input
+                  type="file"
+                  id="profile-pic-input"
+                  accept="image/*"
+                  onchange="previewProfilePic(event)"
+                />
+              </div>
+              <h3 id="profile-details-name"></h3>
+              <span id="profile-details-role" class="role"></span>
+              <p>
+                <br />
+                <strong>Username:</strong>
+                <span id="profile-details-username"></span>
+              </p>
+              <p>
+                <strong>Email:</strong> <span id="profile-details-email"></span>
+              </p>
+              <p>
+                <strong>Phone:</strong> <span id="profile-details-phone"></span>
+              </p>
+              <p>
+                <strong>Address:</strong>
+                <span id="profile-details-address"></span>
+              </p>
+              <p>
+                <strong>Student ID:</strong>
+                <span id="profile-details-student-id"></span>
+              </p>
+              <p>
+                <strong>Bio:</strong> <span id="profile-details-bio"></span>
+              </p>
+              <p>
+                <strong>Role Since:</strong>
+                <span id="profile-details-joined"></span>
+              </p>
+              <p>
+                <strong>Courses Enrolled:</strong>
+                <span id="profile-details-courses"></span>
+              </p>
+            </div>
+            <div class="profile-edit">
+              <h3>Edit Profile</h3>
+              <form id="profile-form" onsubmit="updateProfile(event)">
+                <div class="form-group">
+                  <label for="profile-name">Name:</label>
+                  <input type="text" id="profile-name" required />
+                </div>
+                <div class="form-group">
+                  <label for="profile-email">Email:</label>
+                  <input type="email" id="profile-email" required />
+                </div>
+                <div class="form-group">
+                  <label for="profile-phone">Phone:</label>
+                  <input type="text" id="profile-phone" />
+                </div>
+                <div class="form-group">
+                  <label for="profile-address">Address:</label>
+                  <input type="text" id="profile-address" />
+                </div>
+                <div class="form-group">
+                  <label for="profile-student-id"
+                    >Student ID (for verification):</label
+                  >
+                  <input type="text" id="profile-student-id" readonly />
+                </div>
+                <div class="form-group">
+                  <label for="profile-bio">Bio:</label>
+                  <textarea id="profile-bio" rows="4"></textarea>
+                </div>
+                <button type="submit">Update Profile</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- Links Section -->
+        <section id="links" class="section">
+          <h2>Useful Links</h2>
+          <br />
+          <a href="https://103.57.178.67/sug/">Result Links</a><br /><br />
+          <a href="http://164.52.204.107:81/">Library Links</a>
+        </section>
+
+ <!-- Documents Section -->
+ <section id="documents" class="section">
+  <h2>Student Documents</h2>
+  <div id="documents-student-view" style="display: none;">
+    <h3>Upload Documents</h3>
+    <form id="document-upload-form" onsubmit="uploadDocument(event)">
+      <div class="form-group">
+        <label for="document-type">Document Type:</label>
+        <select id="document-type" required>
+          <option value="" disabled selected>Select Document Type</option>
+          <option value="Aadhaar">Aadhaar Card</option>
+          <option value="Academic">Academic Certificate</option>
+          <option value="Caste">Caste Certificate</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="document-file">Upload Document (PDF only):</label>
+        <input type="file" id="document-file" accept=".pdf" required />
+      </div>
+      <button type="submit">Upload Document</button>
+    </form>
+    <h3>Your Documents</h3>
+    <table id="documents-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>File Name</th>
+          <th>Upload Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="documents-body"></tbody>
+    </table>
+  </div>
+  <div id="documents-faculty-view" style="display: none;">
+    <h3>Student Documents</h3>
+    <div class="form-group-inline">
+      <div>
+        <label for="filter-document-student">Filter by Student:</label>
+        <select id="filter-document-student" onchange="filterDocuments()">
+          <option value="">All Students</option>
+        </select>
+      </div>
+    </div>
+    <table id="documents-faculty-table">
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Type</th>
+          <th>File Name</th>
+          <th>Upload Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="documents-faculty-body"></tbody>
+    </table>
+  </div>
+</section>
+
+
+        <!-- Notifications Section -->
+        <section id="notifications" class="section">
+          <h2>Notifications</h2>
+          <div id="notifications-list"></div>
+        </section>
+
+        <!-- Leave Application Section -->
+        <section id="leave" class="section">
+          <h2>Leave Application</h2>
+          <div id="leave-student-view" style="display: none">
+            <h3>Apply for Leave</h3>
+            <form id="leave-application-form" onsubmit="applyLeave(event)">
+              <div class="form-group">
+                <label for="leave-start-date">Start Date:</label>
+                <input type="date" id="leave-start-date" required />
+              </div>
+              <div class="form-group">
+                <label for="leave-end-date">End Date:</label>
+                <input type="date" id="leave-end-date" required />
+              </div>
+              <div class="form-group">
+                <label for="leave-reason">Reason:</label>
+                <textarea id="leave-reason" rows="4" required></textarea>
+              </div>
+              <button type="submit">Apply for Leave</button>
+            </form>
+            <h3>Your Leave Requests</h3>
+            <table id="leave-student-table">
+              <thead>
+                <tr>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="leave-student-body"></tbody>
+            </table>
+          </div>
+          <div id="leave-faculty-view" style="display: none">
+            <h3>Review Leave Requests</h3>
+            <table id="leave-faculty-table">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="leave-faculty-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Feedback Section -->
+        <section id="feedback" class="section">
+          <h2>Feedback</h2>
+          <div id="feedback-student-view" style="display: none">
+            <h3>Submit Feedback</h3>
+            <form id="feedback-form" onsubmit="submitFeedback(event)">
+              <div class="form-group">
+                <label for="feedback-course">Course:</label>
+                <select id="feedback-course" required>
+                  <option value="" disabled selected>Select Course</option>
+                  <option value="Math">Data Structure</option>
+                  <option value="Science">Java Programming</option>
+                  <option value="History">Computer Network</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="feedback-faculty">Faculty:</label>
+                <select id="feedback-faculty" required>
+                  <option value="" disabled selected>Select Faculty</option>
+                  <option value="Professor Smith">Professor Smith</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="feedback-rating">Rating (1-5):</label>
+                <input
+                  type="number"
+                  id="feedback-rating"
+                  min="1"
+                  max="5"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="feedback-comments">Comments:</label>
+                <textarea id="feedback-comments" rows="4" required></textarea>
+              </div>
+              <button type="submit">Submit Feedback</button>
+            </form>
+          </div>
+          <div id="feedback-faculty-view" style="display: none">
+            <h3>Feedback Received</h3>
+            <table id="feedback-faculty-table">
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Student</th>
+                  <th>Rating</th>
+                  <th>Comments</th>
+                </tr>
+              </thead>
+              <tbody id="feedback-faculty-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="section">
+          <h2>Events</h2>
+          <div id="events-student-view" style="display: none">
+            <h3>Upcoming Events</h3>
+            <table id="events-student-table">
+              <thead>
+                <tr>
+                  <th>Event Name</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Location</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody id="events-student-body"></tbody>
+            </table>
+          </div>
+          <div id="events-faculty-view" style="display: none">
+            <h3>Manage Events</h3>
+            <form id="event-form" onsubmit="addEvent(event)">
+              <div class="form-group">
+                <label for="event-name">Event Name:</label>
+                <input type="text" id="event-name" required />
+              </div>
+              <div class="form-group">
+                <label for="event-date">Date:</label>
+                <input type="date" id="event-date" required />
+              </div>
+              <div class="form-group">
+                <label for="event-time">Time:</label>
+                <input type="time" id="event-time" required />
+              </div>
+              <div class="form-group">
+                <label for="event-location">Location:</label>
+                <input type="text" id="event-location" required />
+              </div>
+              <div class="form-group">
+                <label for="event-description">Description:</label>
+                <textarea id="event-description" rows="4" required></textarea>
+              </div>
+              <button type="submit">Add Event</button>
+            </form>
+            <h3>Event List</h3>
+            <table id="events-faculty-table">
+              <thead>
+                <tr>
+                  <th>Event Name</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Location</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="events-faculty-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Queries Section -->
+        <section id="queries" class="section">
+          <h2>Queries</h2>
+          <div id="queries-student-view" style="display: none">
+            <h3>Submit a Query</h3>
+            <form id="query-form" onsubmit="submitQuery(event)">
+              <div class="form-group">
+                <label for="query-subject">Subject:</label>
+                <select id="query-subject" required>
+                  <option value="" disabled selected>Select Subject</option>
+                  <option value="Math">Data Stucture</option>
+                  <option value="Science">Java Programming</option>
+                  <option value="History">Computer Network</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="query-text">Your Query:</label>
+                <textarea id="query-text" rows="4" required></textarea>
+              </div>
+              <button type="submit">Submit Query</button>
+            </form>
+            <h3>Your Queries</h3>
+            <table id="queries-student-table">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Query</th>
+                  <th>Status</th>
+                  <th>Response</th>
+                </tr>
+              </thead>
+              <tbody id="queries-student-body"></tbody>
+            </table>
+          </div>
+          <div id="queries-faculty-view" style="display: none">
+            <h3>Student Queries</h3>
+            <table id="queries-faculty-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Subject</th>
+                  <th>Query</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="queries-faculty-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Settings Section (Placeholder) -->
+        <section id="settings" class="section">
+          <h2>Settings</h2>
+          <p>Settings page is under construction.</p>
+        </section>
+      </main>
+    </div>
+    <script src="update.js"></script>
+  </body>
+</html>
